@@ -19,6 +19,10 @@ using Base.Test
     @test GenomicIndexes.overlapchunks(tbi, "Chr1", 240057:242608) == [
         (0x0000000000000000, 0x00000006dfe7e426),
         (0x0000000a9781af62, 0x0000000a9781b540)]
+    @test GenomicIndexes.overlapchunks(tbi, "Chr1", 30415837:30418323) == [
+        (0x0000000000000000, 0x000000000000003a),
+        (0x0000000a9781af62, 0x0000000a9781b540),
+        (0x0000001052ebb299, 0x000000147216192d)]
     @test GenomicIndexes.overlapchunks(tbi, "Chr4", 677054:679237) == [
         (0x0000002fa1fb670b, 0x0000003376fb1fbc)]
     @test GenomicIndexes.overlapchunks(tbi, "ChrM", 292973:293431) == [
@@ -53,6 +57,10 @@ end
     @test GenomicIndexes.overlapchunks(csi, 1, 240057:242608) == [
         (0x0000000000000000, 0x00000006dfe7e426),
         (0x0000000a9781af62, 0x0000000a9781b540)]
+    @test GenomicIndexes.overlapchunks(csi, 1, 30415837:30418323) == [
+        (0x0000000000000000, 0x000000000000003a),
+        (0x0000000a9781af62, 0x0000000a9781b540),
+        (0x0000001052ebb299, 0x000000147216192d)]
     @test GenomicIndexes.overlapchunks(csi, 4, 677054:679237) == [
         (0x0000002fa1fb670b, 0x0000003376fb1fbc)]
     @test GenomicIndexes.overlapchunks(csi, 7, 292973:293431) == [
