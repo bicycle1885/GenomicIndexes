@@ -135,12 +135,13 @@ function overlapchunks(csi::CSI, seqid::Integer, interval::UnitRange{<:Integer})
     return chunks
 end
 
-function reg2bins(interval, minshift, depth)
-    return reg2bins(convert(UnitRange{Int}, interval), convert(Int, minshift), convert(Int, depth))
-end
-
+# Calculate bins overlapping an interval (inclusive, one-based).
+reg2bins(interval::UnitRange{<:Integer}, minshift::Integer, depth::Integer) =
+    reg2bins(convert(UnitRange{Int}, interval),
+             convert(Int, minshift),
+             convert(Int, depth))
 function reg2bins(interval::UnitRange{Int}, minshift::Int, depth::Int)
-    bins = UInt32[]
+    bins = Int[]
     s = minshift + depth * 3
     bin_start = 0
     for d in 0:depth

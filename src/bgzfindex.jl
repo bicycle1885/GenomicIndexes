@@ -53,7 +53,7 @@ function overlapchunks(index::BGZFIndex, seqid::Integer, interval::UnitRange{<:I
     end
 
     binindex, linindex, pbin = index.data[seqid]
-    bins = reg2bins(first(interval), last(interval))
+    bins = reg2bins(interval, 14, 5)
     ret = Chunk[]
     idx = cld(first(interval), LinearWindowSize)
     if endof(linindex) ≥ idx
@@ -75,19 +75,6 @@ function overlapchunks(index::BGZFIndex, seqid::Integer, interval::UnitRange{<:I
     reduce!(ret)
 
     return ret
-end
-
-# Calculate bins overlapping a region [from, to] (one-based).
-function reg2bins(from, to)
-    bins = UInt32[]
-    bin_start = 0
-    for scale in 29:-3:14
-        for k in ((from - 1) >> scale):((to - 1) >> scale)
-            push!(bins, bin_start + k)
-        end
-        bin_start = 8 * bin_start + 1
-    end
-    return bins
 end
 
 # Merge chunks so as to minimize the number of seek operations.
