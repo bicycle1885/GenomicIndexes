@@ -36,3 +36,16 @@ end
     bai = BAI(open(baifile))
     @test bai isa BAI
 end
+
+@testset "CSI" begin
+    CSI = GenomicIndexes.CSI
+    csifile = joinpath(dirname(@__FILE__), "TAIR10_GFF3_genes.sorted.gff.bgz.csi")
+
+    # Load from a file.
+    csi = CSI(csifile)
+    @test csi isa CSI
+
+    # Load from a stream.
+    csi = CSI(open(csifile))
+    @test csi isa CSI
+end
