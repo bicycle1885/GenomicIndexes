@@ -109,3 +109,46 @@ function CSI(input_::IO)
 
     return CSI(v, minshift, depth, aux, bins, n_no_coor)
 end
+
+function overlapchunks(csi::CSI, seqid::Integer, interval::UnitRange{<:Integer})
+    if !(1 ≤ seqid ≤ endof(csi.bins))
+        throw(ArgumentError("sequence id $(seqid) is out of range"))
+    elseif isempty(interval)
+        return Chunk[]
+    end
+    chunks = Chunk[]
+    bins = reg2bins(interval, csi.minshift, csi.depth)
+    binindex = csi.bins[seqid]
+    for bin in bins
+        for x in binindex
+            if x.bin == bin
+                for chunk in x.chunks
+                    if chunk[2] > x.loffset
+                        push!(chunks, chunk)
+                    end
+                end
+            end
+        end
+    end
+    sort!(chunks)
+    reduce!(chunks)
+    return chunks
+end
+
+function reg2bins(interval, minshift, depth)
+    return reg2bins(convert(UnitRange{Int}, interval), convert(Int, minshift), convert(Int, depth))
+end
+
+function reg2bins(interval::UnitRange{Int}, minshift::Int, depth::Int)
+    bins = UInt32[]
+    s = minshift + depth * 3
+    bin_start = 0
+    for d in 0:depth
+        for k in ((first(interval)-1)>>s):((last(interval)-1)>>s)
+            push!(bins, bin_start + k)
+        end
+        s -= 3
+        bin_start = 8 * bin_start + 1
+    end
+    return bins
+end
