@@ -3,7 +3,8 @@ module GenomicIndexes
 export
     BAI,
     Tabix,
-    CSI
+    CSI,
+    seqnames
 
 import CodecBGZF
 
