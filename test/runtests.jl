@@ -25,3 +25,14 @@ using Base.Test
         (0x0000004d38e83e1c, 0x0000004d38e8fa5c)]
     @test_throws ArgumentError GenomicIndexes.overlapchunks(tabix, "ChrZ", 1000:20000)
 end
+
+@testset "BAI" begin
+    BAI = GenomicIndexes.BAI
+    baifile = joinpath(dirname(@__FILE__), "ex1.bam.bai")
+
+    bai = BAI(baifile)
+    @test bai isa BAI
+
+    bai = BAI(open(baifile))
+    @test bai isa BAI
+end
